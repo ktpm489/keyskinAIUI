@@ -5,7 +5,7 @@ class BasicForm extends React.Component {
     super(props);
 
     this.handleUserInput = this.handleUserInput.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
+    // this.handleSubmit = this.handleSubmit.bind(this);
     this.isAttendingChange = this.isAttendingChange.bind(this);
 
     this.state = {
@@ -22,6 +22,18 @@ class BasicForm extends React.Component {
       emailValid: false,
       formValid: false,
     };
+  }
+
+  componentDidMount() {
+    // // Simple POST request with a JSON body using fetch
+    // const requestOptions = {
+    //   method: "POST",
+    //   headers: { "Content-Type": "application/json" },
+    //   body: JSON.stringify({ title: "React POST Request Example" }),
+    // };
+    // fetch("https://reqres.in/api/posts", requestOptions)
+    //   .then((response) => response.json())
+    //   .then((data) => console.log("data", data));
   }
 
   isAttendingChange() {
@@ -79,14 +91,14 @@ class BasicForm extends React.Component {
     });
   }
 
-  handleSubmit(e) {
+  handleSubmit = async (e) => {
     e.preventDefault();
     this.setState({
       message: "Sending...",
       isSubmitted: true,
     });
-    this.sendFormData();
-  }
+    await this.sendFormData();
+  };
 
   handleReset = (e) => {
     e.preventDefault();
@@ -106,24 +118,42 @@ class BasicForm extends React.Component {
     });
   };
 
-  isAttendingChange() {
-    this.setState({ isAttending: !this.state.isAttending });
-  }
+  sendFormData = async () => {
+    // var formData = {
+    //   key: this.refs.firstname.value,
+    //   // lastname: this.refs.lastname.value,
+    //   // email: this.refs.email.value,
+    //   // isAttending: this.state.isAttending
+    // };
+    // console.log(formData);
+    // setTimeout(() => {
+    //   this.setState({
+    //     message: "Submit is sented. Thank you",
+    //   });
+    // }, 2000);
 
-  sendFormData() {
-    var formData = {
-      key: this.refs.firstname.value,
-      // lastname: this.refs.lastname.value,
-      // email: this.refs.email.value,
-      // isAttending: this.state.isAttending
+    const requestOptions = {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ key: this.refs.firstname.value.trim() }),
     };
-    console.log(formData);
-    setTimeout(() => {
-      this.setState({
-        message: "Submit is sented. Thank you",
+    fetch(
+      "https://csgadmin.com/api/key/60ca2759312463343ef3f7d2",
+      requestOptions
+    )
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("data", data);
+        this.setState({
+          message: "Submit is sented. Thank you",
+        });
+      })
+      .catch((e) => {
+        this.setState({
+          message: "Submit is not sented. Try again",
+        });
       });
-    }, 2000);
-  }
+  };
 
   errorClass(error) {
     return error.length === 0 ? "" : "has-error";
