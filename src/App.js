@@ -120,7 +120,7 @@ class BasicForm extends React.Component {
     console.log(formData);
     setTimeout(() => {
       this.setState({
-        message: "Submit is sented. Thank you, " + this.refs.firstname.value,
+        message: "Submit is sented. Thank you",
       });
     }, 2000);
   }
